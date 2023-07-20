@@ -1,0 +1,46 @@
+- name: Package
+  package:
+    name:
+      - sssd 
+      - libpam-sss 
+      - libnss-sss 
+      - sssd-tools
+    state: present
+
+# - name: Enable SSSD
+#   command: authconfig --enablesssd --enablesssdauth --enablelocauthorize --enablemkhomedir --update
+#   when: sssd_enabled.found is not defined or not sssd_enabled.found
+
+- name: Template >> /etc/sssd/sssd.conf
+  template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    mode: 0600
+
+- name: Add pam_mkhomedir.so pam module
+  lineinfile:
+    path: /etc/pam.d/common-session
+    regexp: 'pam_mkhomedir.so'
+    line: 'session required        pam_mkhomedir.so skel=/etc/skel/ umask=0022'
+    insertafter: 'pam_sss.so'
+
+- name: Enable/disable services
+  service:
+    name: "{{ item }}"
+    enabled: "{{ (enable_services | bool) | ternary('yes','no') }}"
+  with_items:
+#    - nscd
+    - sssd
+  tags:
+    - service
+
+- name: Start services
+  service:
+    name: "{{ item }}"
+    state: started
+  with_items:
+#    - nscd
+    - sssd
+  when: (start_services | bool)
+  tags:
+    - service

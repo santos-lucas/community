@@ -1,13 +1,17 @@
 ---
+- name: include_tasks ░ Use OS dedicated task
+  include_tasks: "{{ (ansible_facts.distribution|lower|replace(' ','_')) }}.yml"
+  tags:
+    - internal
 
 - name: include_tasks ░ OpenLDAP client
-  include_tasks: "client.yml"
+  include_tasks: "{{ (ansible_facts.distribution|replace(' ','_')) }}/client.yml"
   when: openldap_client is defined and openldap_client
   tags:
     - internal
 
 - name: include_tasks ░ OpenLDAP server
-  include_tasks: "server.yml"
+  include_tasks: "{{ (ansible_facts.distribution|replace(' ','_')) }}/server.yml"
   when: openldap_server is defined and openldap_server
   tags:
     - internal
