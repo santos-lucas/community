@@ -261,6 +261,7 @@ To enable it on the slurm configuration its required to define `slurm_SelectType
 
 ## Changelog
 
+* 1.3.0: Added suport for pam_slurm_adopt . Lucas Santos <lucassouzasantos@gmail.com>
 * 1.2.0: Added GPU Gres configuration. Lucas Santos <lucassouzasantos@gmail.com>
 * 1.1.1: Missing string filter in template. Benoit Leveugle <benoit.leveugle@gmail.com>
 * 1.1.0: Role major upgrade. Benoit Leveugle <benoit.leveugle@gmail.com>
