@@ -88,3 +88,8 @@
   ansible.builtin.include_tasks: "submitter.yml"
   when: slurm_profile == 'submitter'
 
+# Setup slurm_adoption
+- name: include_tasks ░ Configure slurm_adopt
+  ansible.builtin.include_tasks: "pam_slurm_adopt.yml"
+  when: slurm_enable_pam_slurm_adopt is defined and slurm_enable_pam_slurm_adopt and slurm_profile == 'compute'
+

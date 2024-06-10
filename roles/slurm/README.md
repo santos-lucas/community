@@ -189,6 +189,33 @@ And check again if the cluster exist:
 sacctmgr list cluster
 ```
 
+### Access restriction - pam_slurm_adoption
+
+pam_slurm_adoption is a pam module made to make sure that users only can access the resources allocated to them, this means that users that dont have resources allocated on a compute node, wont be able to ssh for it. Also, when the user does have resources allocated, all his processes will be restricted to the same cgroup restrictions.
+
+By default, pam_slurm_adoption is disabled, to enable it, change the following variable on your inventories:
+
+```yaml
+slurm_enable_pam_slurm_adopt: true
+```
+
+example in your slurm configuration:
+
+```yaml
+  slurm_cluster_name: bluebanquise
+  slurm_control_machine: management1
+  slurm_enable_pam_slurm_adopt: true
+  slurm_computes_groups:
+    - equipment_typeC
+  slurm_all_partition:
+      enable: true
+      partition_configuration:
+        State: UP
+        Default: yes
+```
+
+By default on EL8 systems, also, the local users on the system will not be afected by this configuratio, neither the root user.
+
 ### GPU Gres
 
 Unfortunately for now, this is only supported for NVIDIA GPUS.
